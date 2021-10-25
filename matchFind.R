@@ -1,5 +1,10 @@
 
 
+library(stringi)
+library(pbapply)
+library(data.table)
+library(dplyr)
+
 matchFind<-function (df1, df2, org1, org2, msa, ort = TRUE){
   
   warnOpt <- getOption("warn")

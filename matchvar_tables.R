@@ -1,7 +1,6 @@
 
 # This script prepare variant tables for matching variants
 
-library(orthoVar)
 library(tidyr)
 library(data.table)
 library(stringr)
