@@ -42,9 +42,9 @@ colnames(mouse_all)[3]<-"transcript_id"
 
 # Mutagenetix variants ----
 
-datenow<-"2021-08-14"
-idnow1<-1045
-idnow2<-1046
+datenow<-"2021-10-16"
+idnow1<-1073
+idnow2<-1074
 
 numbOfDays<-as.numeric(difftime(Sys.Date(), as.Date(datenow)), units = "days")
 mod<-numbOfDays %% 7
