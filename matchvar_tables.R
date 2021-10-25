@@ -6,6 +6,7 @@ library(tidyr)
 library(data.table)
 library(stringr)
 library(seqinr)
+library(RMySQL)
 
 source("orthoFind.R")
 
@@ -74,7 +75,7 @@ colnames(topmedx1)[1]<-"aapos"
 
 write.table(topmedx1, "topmed_analysis.txt", row.names = FALSE, quote = FALSE, sep = "\t")
 
-library(RMySQL)
+
 con <- dbConnect(RMySQL::MySQL(), host = 'localhost', user = 'user', password = 'password', dbname = 'convart', port = 3306)
 cosmicx<-tbl(con, "CosmicMutantExport") %>%
   dplyr::select(c(3,20)) %>%
@@ -103,11 +104,11 @@ cosmic<-cosmic[!is.na(cosmic$Refseq_ID),]
 cosmic<-unique(cosmic)
 
 
-con <- dbConnect(RMySQL::MySQL(), host = 'localhost', user = 'user', password = 'password', dbname = 'convart', port = 3306)
 gnomad<-tbl(con, "gnomad") %>%
   dplyr::select(canonical_transcript, variation, position) %>%
   collect()
 dbDisconnect(con)
+
 gnomad$variation<-gsub("p\\.", "", gnomad$variation)
 gnomad$from<-str_split(gnomad$variation, "\\d+", simplify = TRUE)[,1]
 gnomad$to<-str_split(gnomad$variation, "\\d+", simplify = TRUE)[,2]
@@ -126,22 +127,22 @@ gnomad<-gnomad %>% dplyr::select(Refseq_ID, aapos, from, to)
 gnomad<-unique(gnomad)
 
 
-mutagen_old<-fread("mutagen_analysis.txt")
-mouse_old<-fread("mouse_analysis.txt")
-celegans_old<-fread("celegans_analysis.txt")
-clinvar_old<-fread("clinvar_analysis.txt")
-topmed_old<-fread("topmed_analysis.txt")
-cosmic_old<-fread("cosmic_analysis.txt")
-gnomad_old<-fread("gnomad_analysis.txt")
-
-
-mutagen_new<-anti_join(mutagen, mutagen_old)
-mouse_new<-anti_join(mouse, mouse_old)
-celegans_new<-anti_join(celegans, celegans_old)
-clinvar_new<-anti_join(clinvar, clinvar_old)
-topmed_new<-anti_join(topmedx1, topmed_old)
-cosmic_new<-anti_join(cosmic, cosmic_old)
-gnomad_new<-anti_join(gnomad, gnomad_old)
+# mutagen_old<-fread("mutagen_analysis.txt")
+# mouse_old<-fread("mouse_analysis.txt")
+# celegans_old<-fread("celegans_analysis.txt")
+# clinvar_old<-fread("clinvar_analysis.txt")
+# topmed_old<-fread("topmed_analysis.txt")
+# cosmic_old<-fread("cosmic_analysis.txt")
+# gnomad_old<-fread("gnomad_analysis.txt")
+# 
+# 
+# mutagen_new<-anti_join(mutagen, mutagen_old)
+# mouse_new<-anti_join(mouse, mouse_old)
+# celegans_new<-anti_join(celegans, celegans_old)
+# clinvar_new<-anti_join(clinvar, clinvar_old)
+# topmed_new<-anti_join(topmedx1, topmed_old)
+# cosmic_new<-anti_join(cosmic, cosmic_old)
+# gnomad_new<-anti_join(gnomad, gnomad_old)
 
 
 write.table(mutagen, "mutagen_analysis.txt", row.names = FALSE, quote = FALSE, sep = "\t")
@@ -153,11 +154,11 @@ write.table(cosmic, "cosmic_analysis.txt", row.names = FALSE, quote = FALSE, sep
 write.table(gnomad, "gnomad_analysis.txt", row.names = FALSE, quote = FALSE, sep = "\t")
 
 
-write.table(mutagen_new, "mutagen_analysis_new.txt", row.names = FALSE, quote = FALSE, sep = "\t")
-write.table(mouse_new, "mouse_analysis_new.txt", row.names = FALSE, quote = FALSE, sep = "\t")
-write.table(celegans_new, "celegans_analysis_new.txt", row.names = FALSE, quote = FALSE, sep = "\t")
-write.table(clinvar_new, "clinvar_analysis_new.txt", row.names = FALSE, quote = FALSE, sep = "\t")
-write.table(topmedx1_new, "topmed_analysis_new.txt", row.names = FALSE, quote = FALSE, sep = "\t")
-write.table(cosmic_new, "cosmic_analysis_new.txt", row.names = FALSE, quote = FALSE, sep = "\t")
-write.table(gnomad_new, "gnomad_analysis_new.txt", row.names = FALSE, quote = FALSE, sep = "\t")
+# write.table(mutagen_new, "mutagen_analysis_new.txt", row.names = FALSE, quote = FALSE, sep = "\t")
+# write.table(mouse_new, "mouse_analysis_new.txt", row.names = FALSE, quote = FALSE, sep = "\t")
+# write.table(celegans_new, "celegans_analysis_new.txt", row.names = FALSE, quote = FALSE, sep = "\t")
+# write.table(clinvar_new, "clinvar_analysis_new.txt", row.names = FALSE, quote = FALSE, sep = "\t")
+# write.table(topmedx1_new, "topmed_analysis_new.txt", row.names = FALSE, quote = FALSE, sep = "\t")
+# write.table(cosmic_new, "cosmic_analysis_new.txt", row.names = FALSE, quote = FALSE, sep = "\t")
+# write.table(gnomad_new, "gnomad_analysis_new.txt", row.names = FALSE, quote = FALSE, sep = "\t")
 
